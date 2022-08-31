@@ -17,10 +17,18 @@ const saveTemplate = async(req,res)=>{
 
 const getTemplate = async(req,res)=>{
     let shop = req.params.shop;
-    const result = await Template.findOne({shop:shop})
+    const result = await Template.find({shop:shop})
     res.status(200).send(result);
 }  
 
 
+const updateTemplate = async(req,res)=>{
+    let id = req.params.id;
+    let data = req.body;
+    console.log('data>>>>',data)
+    const result = await Template.findByIdAndUpdate({_id:id},{$set:{data}})
+    res.status(200).send(result);
+}
+
   
-export default {saveTemplate,getTemplate}
+export default {saveTemplate,getTemplate,updateTemplate}

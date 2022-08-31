@@ -5,6 +5,7 @@ const router = express.Router();
 
 router.post('/api/savedetails',mycontroller.saveTemplate);
 router.get('/api/getdetails/:shop',mycontroller.getTemplate);
+router.patch('/api/updatedetails/:id',mycontroller.updateTemplate);
 
 
 

@@ -2,17 +2,15 @@ import mongoose from "mongoose";
 
 const template = mongoose.Schema({
 
-        title:{
+        shop:{
             type:String,
             required:true
         },
-        body:{
-            type:String,
-            required:true
+        merchant:{
+            type:String
         },
-        location:{
-            type:String,
-            required:true
+        user:{
+            type:String
         },
         
 
