@@ -7,7 +7,6 @@ function UserComponent() {
     const [curLocation, setLocation] = useState('localuser');
     const [curPrevData, setPrevData] = useState({});
   
-
     const options = [
         {label: 'Local', value: 'localuser'},
         {label: 'Remote', value: 'remoteuser'}
@@ -16,25 +15,19 @@ function UserComponent() {
   const titlechange = useCallback((newValue) => setTitle(newValue), []);
   const bodychange = useCallback((newValue) => setBody(newValue), []);
   const locationchange = useCallback((newValue) => setLocation(newValue), []);
-  
-
-    
 
 
    useEffect(()=>{
      getpredata();
-    console.log(curPrevData)
+    console.log("curPrevData First Time >>>",curPrevData)
    },[])
  
     const getpredata = async ()=>{
       let getResponse  = await fetch(`/api/getdetails/${shop}`,{
         method:"GET"})
       const result1 = await getResponse.json();  
-        console.log(result1)
          setPrevData(result1);
     }
-
-  
 
   
   //Shop
@@ -47,7 +40,7 @@ function UserComponent() {
   
   let data = {shop:shop, user:JSON.stringify(User), merchant:''} 
   
-  //Save Data or Update data
+  //Save Data And Update data
   let saveData;
   if(curPrevData.length < 1){
 
@@ -60,23 +53,31 @@ function UserComponent() {
                                     },
                             body: JSON.stringify(data)
                           })
-          let result = await response.json();    
-          console.log(result);
+          let result = await response.json();
+          console.log('Data inserted >>>',result);
           getpredata();
-          console.log('insert details')
     }                      
   }else{
 
     
     saveData = async()=>{
+
+
+      // console.log('curPrevData Parse======',JSON.parse(curPrevData[0].user))
+      let userData = JSON.parse(curPrevData[0].user);
+      let insideData = userData.inside;
+      let remoteData = userData.remote;
+
       if (curLocation == 'localuser') {
-        var User = { inside: [{title:curtitle, msgbody:curbody}], remote: ["", ""] };
+        var User = { inside: [{title:curtitle, msgbody:curbody}], remote: remoteData };
       } else {
-        var User = { inside: ["", ""], remote: [{title:curtitle, msgbody:curbody}] };
+        var User = { inside: insideData, remote: [{title:curtitle, msgbody:curbody}] };
       }
+     
+      let newdata = {shop:shop, user:JSON.stringify(User), merchant:''} 
+
+
       
-      let data = JSON.stringify(User) 
-      console.log('data>>>',data)
       console.log('update details')
             let response  = await fetch(`/api/updatedetails/${curPrevData[0]._id}`,{
                                 method:"PATCH",
@@ -84,10 +85,10 @@ function UserComponent() {
                                         'Access-Control-Allow-Origin':'*',
                                         'Content-Type':'application/json'
                                         },
-                                body: JSON.stringify(data)
+                                body: JSON.stringify(newdata)
                             })
             let result = await response.json();    
-            console.log(result);
+            console.log('Data updated>>>',result);
             getpredata();
     }
   }

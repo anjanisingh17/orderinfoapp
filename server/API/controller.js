@@ -26,7 +26,7 @@ const updateTemplate = async(req,res)=>{
     let id = req.params.id;
     let data = req.body;
     console.log('data>>>>',data)
-    const result = await Template.findByIdAndUpdate({_id:id},{$set:{data}})
+    const result = await Template.findByIdAndUpdate({_id:id},{$set:data},{new:true})
     res.status(200).send(result);
 }
 
