@@ -1,6 +1,8 @@
 import { Shopify } from "@shopify/shopify-api";
 
 import topLevelAuthRedirect from "../helpers/top-level-auth-redirect.js";
+import { LocalStorage } from "node-localstorage";
+var localStorage = new LocalStorage("./scratch");
 
 export default function applyAuthMiddleware(app) {
   app.get("/auth", async (req, res) => {
@@ -47,6 +49,10 @@ export default function applyAuthMiddleware(app) {
         res,
         req.query
       );
+
+      localStorage.setItem("accessToken", session.accessToken);
+      localStorage.setItem("shop", session.shop);
+      // console.log("session", session)
 
       const host = req.query.host;
       app.set(
